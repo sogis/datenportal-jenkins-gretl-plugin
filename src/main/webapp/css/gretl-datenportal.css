@@ -745,6 +745,45 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
+.gdp-artifact-disclosure__summary {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    gap: 0.55rem;
+    list-style: none;
+    margin-bottom: 0;
+}
+
+.gdp-artifact-disclosure__summary::-webkit-details-marker {
+    display: none;
+}
+
+.gdp-artifact-disclosure__summary::before {
+    color: var(--gdp-muted);
+    content: "▸";
+    flex: 0 0 auto;
+}
+
+.gdp-artifact-disclosure[open] > .gdp-artifact-disclosure__summary {
+    margin-bottom: 1rem;
+}
+
+.gdp-artifact-disclosure[open] > .gdp-artifact-disclosure__summary::before {
+    content: "▾";
+}
+
+.gdp-artifact-disclosure__summary:focus-visible {
+    border-radius: 2px;
+    outline: 2px solid var(--gdp-blue);
+    outline-offset: 3px;
+}
+
+.gdp-artifact-count {
+    color: var(--gdp-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
 .gdp-artifact-list {
     display: grid;
     gap: 0.55rem;

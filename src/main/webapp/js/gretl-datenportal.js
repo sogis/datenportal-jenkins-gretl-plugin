@@ -172,8 +172,11 @@
         if (!container) {
             return;
         }
+        var disclosure = container.querySelector("[data-gdp-artifact-disclosure]");
+        var wasOpen = disclosure && disclosure.open;
         if (!artifacts || artifacts.length === 0) {
-            container.innerHTML = "<p class=\"gdp-muted\">Keine Artefakte archiviert.</p>";
+            container.innerHTML = "<div class=\"gdp-panel__header\"><h2>Artefakte</h2></div>"
+                    + "<p class=\"gdp-muted\">Keine Artefakte archiviert.</p>";
             return;
         }
 
@@ -183,7 +186,11 @@
                     + "<span>" + escapeHtml(artifact.fileName) + "</span>"
                     + "</a>";
         }).join("");
-        container.innerHTML = "<div class=\"gdp-artifact-list\">" + items + "</div>";
+        container.innerHTML = "<details class=\"gdp-artifact-disclosure\" data-gdp-artifact-disclosure=\"true\""
+                + (wasOpen ? " open=\"open\"" : "")
+                + "><summary class=\"gdp-panel__header gdp-artifact-disclosure__summary\">"
+                + "<h2>Artefakte</h2><span class=\"gdp-artifact-count\">(" + artifacts.length + ")</span>"
+                + "</summary><div class=\"gdp-artifact-list\">" + items + "</div></details>";
     }
 
     function renderLog(container, logText, running) {

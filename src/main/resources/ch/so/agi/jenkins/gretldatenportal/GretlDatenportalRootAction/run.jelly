@@ -133,22 +133,28 @@
                                 </section>
 
                                 <section class="gdp-panel">
-                                    <div class="gdp-panel__header">
-                                        <h2>Artefakte</h2>
-                                    </div>
                                     <div data-gdp-artifacts="true">
                                         <j:choose>
                                             <j:when test="${details.hasArtifacts()}">
-                                                <div class="gdp-artifact-list">
-                                                    <j:forEach var="artifact" items="${details.artifacts}">
-                                                        <a class="gdp-artifact" href="${rootURL}/${details.run.url}artifact/${artifact.relativePath}">
-                                                            <span class="gdp-artifact__icon" aria-hidden="true">Datei</span>
-                                                            <span>${artifact.fileName}</span>
-                                                        </a>
-                                                    </j:forEach>
-                                                </div>
+                                                <details class="gdp-artifact-disclosure" data-gdp-artifact-disclosure="true">
+                                                    <summary class="gdp-panel__header gdp-artifact-disclosure__summary">
+                                                        <h2>Artefakte</h2>
+                                                        <span class="gdp-artifact-count">(${details.artifacts.size()})</span>
+                                                    </summary>
+                                                    <div class="gdp-artifact-list">
+                                                        <j:forEach var="artifact" items="${details.artifacts}">
+                                                            <a class="gdp-artifact" href="${rootURL}/${details.run.url}artifact/${artifact.relativePath}">
+                                                                <span class="gdp-artifact__icon" aria-hidden="true">Datei</span>
+                                                                <span>${artifact.fileName}</span>
+                                                            </a>
+                                                        </j:forEach>
+                                                    </div>
+                                                </details>
                                             </j:when>
                                             <j:otherwise>
+                                                <div class="gdp-panel__header">
+                                                    <h2>Artefakte</h2>
+                                                </div>
                                                 <p class="gdp-muted">Keine Artefakte archiviert.</p>
                                             </j:otherwise>
                                         </j:choose>
