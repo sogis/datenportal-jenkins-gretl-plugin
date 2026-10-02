@@ -69,13 +69,13 @@ class RunDetailsTest {
                 new StashedFileParameterDefinition("METADATA_FILE"),
                 new StashedFileParameterDefinition("DATA_FILE"))));
         WorkflowRun run = job.scheduleBuild2(0, new ParametersAction(List.of(
-                new StringParameterValue("DATASET", "ch.so.agi.av_nachfuehrungsstatistik.umsatz"),
+                new StringParameterValue("DATASET", "ch.so.av_nachfuehrungsstatistik.umsatz"),
                 new TextParameterValue("COMMENT", "Kommentar"),
                 stashedFileParameter("METADATA_FILE", "umsatz-metadaten.xtf"),
                 stashedFileParameter("DATA_FILE", "umsatz.csv")))).get();
 
         RunDetails details = new RunDetails(run);
-        assertEquals("ch.so.agi.av_nachfuehrungsstatistik.umsatz", parameterValue(details.getParameters(), "DATASET"));
+        assertEquals("ch.so.av_nachfuehrungsstatistik.umsatz", parameterValue(details.getParameters(), "DATASET"));
         assertEquals("Kommentar", parameterValue(details.getParameters(), "COMMENT"));
         assertEquals("umsatz-metadaten.xtf", parameterValue(details.getParameters(), "METADATA_FILE"));
         assertEquals("umsatz.csv", parameterValue(details.getParameters(), "DATA_FILE"));
