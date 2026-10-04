@@ -20,6 +20,11 @@ nicht vorkommen. «Zurück» und «Weiter» behalten die Filter bei. Ein
 Filterwechsel beginnt wieder auf Seite 1. Ohne JavaScript übernimmt der
 Button «Filtern» diese Auswahl.
 
+Jede Ausführungskarte enthält das Status-Badge, den Datensatztitel mit
+Organisation und Buildnummer, Datum und Uhrzeit sowie den Button «Details».
+Lange Titel dürfen vollständig umbrechen. Weitere Metadaten und die Dauer
+sind in der Detailansicht verfügbar.
+
 Die GET-Parameter heissen `organization`, `dataset`, `status` und `page`.
 Fehlende, ungültige oder nicht positive Seitennummern verwenden Seite 1;
 Seitennummern über der letzten Seite verwenden die letzte Seite. Die

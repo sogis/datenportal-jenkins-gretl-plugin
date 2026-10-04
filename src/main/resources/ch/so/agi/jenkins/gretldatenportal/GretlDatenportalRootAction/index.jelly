@@ -112,18 +112,14 @@
                                             <div class="gdp-run-row__title">
                                                 <span>${run.displayTitle}</span>
                                             </div>
-                                            <div class="gdp-run-row__meta">
-                                                <span>Organisation: <span>${run.organization}</span></span>
-                                                <span>Datensatz: <span>${run.dataset}</span></span>
-                                                <span>Jobname: <span>${run.jobFullName}</span></span>
+                                        </div>
+                                        <div class="gdp-run-row__end">
+                                            <div class="gdp-run-row__time">
+                                                <span>${run.startTime}</span>
                                             </div>
-                                        </div>
-                                        <div class="gdp-run-row__time">
-                                            <span>${run.startTime}</span>
-                                            <span>${run.duration}</span>
-                                        </div>
-                                        <div class="gdp-run-row__actions">
-                                            <a class="jenkins-button" href="${rootURL}/${it.urlName}/run?job=${run.jobNameEncoded}&amp;build=${run.buildNumber}">Details</a>
+                                            <div class="gdp-run-row__actions">
+                                                <a class="jenkins-button" href="${rootURL}/${it.urlName}/run?job=${run.jobNameEncoded}&amp;build=${run.buildNumber}">Details</a>
+                                            </div>
                                         </div>
                                     </article>
                                 </j:forEach>

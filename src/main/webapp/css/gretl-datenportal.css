@@ -403,6 +403,11 @@
     padding: 0.85rem;
 }
 
+.gdp-run-row {
+    grid-template-columns: minmax(7.5rem, auto) minmax(0, 1fr) auto;
+    padding: 0.65rem 0.85rem;
+}
+
 .gdp-job-row {
     grid-template-columns: minmax(0, 1fr) auto;
 }
@@ -457,15 +462,23 @@
     margin: 0.2rem 0 0;
 }
 
+.gdp-run-row__end {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    justify-content: flex-end;
+    min-width: 0;
+}
+
 .gdp-run-row__time {
-    display: grid;
-    gap: 0.2rem;
     min-width: 9.5rem;
     text-align: right;
+    white-space: nowrap;
 }
 
 .gdp-run-row__time span {
-    color: var(--gdp-muted);
+    color: #59636e;
 }
 
 .gdp-run-row__actions {
@@ -917,8 +930,11 @@
         grid-template-columns: minmax(7.5rem, auto) minmax(0, 1fr);
     }
 
-    .gdp-run-row__time,
-    .gdp-run-row__actions {
+    .gdp-run-row__end {
+        grid-column: 2;
+    }
+
+    .gdp-job-row .gdp-run-row__actions {
         grid-column: 2;
         justify-content: flex-start;
         text-align: left;
@@ -972,8 +988,11 @@
         grid-template-columns: 1fr;
     }
 
-    .gdp-run-row__time,
-    .gdp-run-row__actions {
+    .gdp-run-row__end {
+        grid-column: auto;
+    }
+
+    .gdp-job-row .gdp-run-row__actions {
         grid-column: auto;
     }
 }
