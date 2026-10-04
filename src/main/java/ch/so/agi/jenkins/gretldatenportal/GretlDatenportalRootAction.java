@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.HashMap;
 import java.util.List;
@@ -112,8 +111,34 @@ public class GretlDatenportalRootAction implements RootAction {
     }
 
     public List<DatenportalRunSummary> getExecutedRuns() {
+        List<DatenportalRunSummary> runs = collectExecutedRuns(getScanResult());
+        runs.sort(DatenportalRunOverview.RUN_ORDER);
+        return runs;
+    }
+
+    public DatenportalRunOverview getRunOverview() {
+        StaplerRequest2 request = Stapler.getCurrentRequest2();
+        String attribute = GretlDatenportalRootAction.class.getName() + ".runOverview";
+        if (request != null && request.getAttribute(attribute) instanceof DatenportalRunOverview overview) {
+            return overview;
+        }
+        ScanResult scanResult = getScanResult();
+        DatenportalRunOverview overview = new DatenportalRunOverview(
+                scanResult,
+                collectExecutedRuns(scanResult),
+                currentParameter("organization"),
+                currentParameter("dataset"),
+                currentParameter("status"),
+                currentParameter("page"));
+        if (request != null) {
+            request.setAttribute(attribute, overview);
+        }
+        return overview;
+    }
+
+    private List<DatenportalRunSummary> collectExecutedRuns(ScanResult scanResult) {
         List<DatenportalRunSummary> runs = new ArrayList<>();
-        for (OrganizationUnit organization : getOrganizations()) {
+        for (OrganizationUnit organization : scanResult.getOrganizations()) {
             WorkflowJob workflowJob = getVisibleWorkflowJob(organization);
             if (workflowJob == null) {
                 continue;
@@ -122,7 +147,6 @@ public class GretlDatenportalRootAction implements RootAction {
                 runs.add(new DatenportalRunSummary(run, organization));
             }
         }
-        runs.sort(Comparator.comparingLong(DatenportalRunSummary::getStartTimeMillis).reversed());
         return runs;
     }
 

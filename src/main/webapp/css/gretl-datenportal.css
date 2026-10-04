@@ -140,6 +140,23 @@
     gap: 0.35rem;
 }
 
+.gdp-toolbar noscript {
+    grid-column: 1 / -1;
+}
+
+.gdp-pagination,
+.gdp-pagination__links {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.gdp-pagination {
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
 .gdp-filter span,
 .gdp-label {
     color: var(--gdp-text);

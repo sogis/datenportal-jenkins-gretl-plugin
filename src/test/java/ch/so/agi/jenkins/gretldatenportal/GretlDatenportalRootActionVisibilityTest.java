@@ -2,6 +2,10 @@ package ch.so.agi.jenkins.gretldatenportal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import hudson.model.ParametersAction;
+import hudson.model.ParametersDefinitionProperty;
+import hudson.model.StringParameterDefinition;
+import hudson.model.StringParameterValue;
 import hudson.security.ACL;
 import hudson.security.ACLContext;
 import hudson.security.ProjectMatrixAuthorizationStrategy;
@@ -72,14 +76,23 @@ class GretlDatenportalRootActionVisibilityTest {
         synchronizer.synchronize(
                 statistikdienstJob,
                 new PermissionConfiguration(List.of("other-user"), List.of()));
-        createBuild(afuJob);
-        createBuild(statistikdienstJob);
+        createBuild(afuJob, "afu", "ch.so.afu");
+        createBuild(statistikdienstJob, "statistikdienst", "ch.so.statistikdienst");
 
         GretlDatenportalRootAction action = new GretlDatenportalRootAction();
 
         try (ACLContext ignored = ACL.as2(authentication("read-user"))) {
             assertEquals(List.of("afu"), organizationIds(action));
             assertEquals(List.of("gretl-datenportal-afu"), executedJobNames(action));
+            assertEquals(1, action.getRunOverview().getTotalCount());
+            assertEquals(List.of("gretl-datenportal-afu"), action.getRunOverview().getRuns().stream()
+                    .map(DatenportalRunSummary::getJobName).toList());
+            assertEquals(List.of("ch.so.afu"), action.getRunOverview().getRuns().stream()
+                    .map(DatenportalRunSummary::getDatasetValue).toList());
+            assertEquals(List.of("afu"), action.getRunOverview().getOrganizationOptions().stream()
+                    .map(DatenportalRunOverview.FilterOption::getValue).toList());
+            assertEquals(List.of("ch.so.afu"), action.getRunOverview().getDatasetOptions().stream()
+                    .map(DatenportalRunOverview.FilterOption::getValue).toList());
         }
         try (ACLContext ignored = ACL.as2(authentication("build-user"))) {
             assertEquals(List.of("afu"), organizationIds(action));
@@ -87,17 +100,25 @@ class GretlDatenportalRootActionVisibilityTest {
         try (ACLContext ignored = ACL.as2(authentication("catalog-user"))) {
             assertEquals(List.of(), organizationIds(action));
             assertEquals(List.of(), executedJobNames(action));
+            assertEquals(0, action.getRunOverview().getTotalCount());
+            assertEquals(List.of(), action.getRunOverview().getOrganizationOptions());
+            assertEquals(List.of(), action.getRunOverview().getDatasetOptions());
         }
     }
 
     private WorkflowJob workflowJob(JenkinsRule jenkinsRule, String name) throws Exception {
         WorkflowJob job = jenkinsRule.jenkins.createProject(WorkflowJob.class, name);
+        job.addProperty(new ParametersDefinitionProperty(
+                new StringParameterDefinition("ORGANISATION", ""),
+                new StringParameterDefinition("DATASET", "")));
         job.setDefinition(new CpsFlowDefinition("echo 'test'", true));
         return job;
     }
 
-    private void createBuild(WorkflowJob job) throws Exception {
-        WorkflowRun run = job.scheduleBuild2(0).get();
+    private void createBuild(WorkflowJob job, String organization, String dataset) throws Exception {
+        WorkflowRun run = job.scheduleBuild2(0, new ParametersAction(
+                new StringParameterValue("ORGANISATION", organization),
+                new StringParameterValue("DATASET", dataset))).get();
         assertEquals(1, run.getNumber());
     }
 

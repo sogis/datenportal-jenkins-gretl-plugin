@@ -17,7 +17,7 @@ import net.sf.json.JSONObject;
 @Extension
 @Symbol("gretlDatenportalJobs")
 public class GretlDatenportalGlobalConfiguration extends GlobalConfiguration {
-    private String displayName = "GRETL Datenportal Jobs";
+    private String displayName = "Datenportal Jobs";
     private String urlName = "gretl-datenportal";
     private String topicRepositoryUrl = "";
     private String topicRepositoryBranch = "main";
@@ -43,7 +43,8 @@ public class GretlDatenportalGlobalConfiguration extends GlobalConfiguration {
 
     @Override
     public String getDisplayName() {
-        return displayName == null || displayName.isBlank() ? "GRETL Datenportal Jobs" : displayName;
+        return displayName == null || displayName.isBlank() || "GRETL Datenportal Jobs".equals(displayName)
+                ? "Datenportal Jobs" : displayName;
     }
 
     @DataBoundSetter

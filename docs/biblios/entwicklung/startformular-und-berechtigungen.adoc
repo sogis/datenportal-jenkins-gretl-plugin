@@ -11,6 +11,23 @@ Das Plugin stellt eine RootAction unter `/gretl-datenportal` bereit. Das
 Startformular ist fest verdrahtet und wird nicht mehr aus Repository-YAML
 abgeleitet.
 
+Die Startseite «Datenportal Jobs» zeigt die ausgeführten Jobs mit zehn
+Treffern pro Seite, neueste Ausführung zuerst. Organisation, Datensatz und
+Status filtern serverseitig die gesamte für den Benutzer lesbare Historie;
+erst danach wird die Seite ausgewählt. Die Filterauswahl enthält die Werte
+aus der gesamten lesbaren Historie, auch wenn sie auf der aktuellen Seite
+nicht vorkommen. «Zurück» und «Weiter» behalten die Filter bei. Ein
+Filterwechsel beginnt wieder auf Seite 1. Ohne JavaScript übernimmt der
+Button «Filtern» diese Auswahl.
+
+Die GET-Parameter heissen `organization`, `dataset`, `status` und `page`.
+Fehlende, ungültige oder nicht positive Seitennummern verwenden Seite 1;
+Seitennummern über der letzten Seite verwenden die letzte Seite. Die
+Seitengrösse ist fest zehn; es werden keine Builds gelöscht. Der bekannte
+frühere Standard-Anzeigename «GRETL Datenportal Jobs» wird auch bei bestehenden
+Konfigurationen als «Datenportal Jobs» angezeigt. Individuelle Anzeigenamen
+bleiben erhalten; URL und technische Plugin-ID ändern sich nicht.
+
 Unterstuetzte Felder:
 
 * `ORGANISATION`

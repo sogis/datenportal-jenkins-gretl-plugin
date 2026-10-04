@@ -28,9 +28,16 @@ class RootActionViewAssetsTest {
         assertFalse(jelly.contains("repositoryPathString"));
         assertFalse(jelly.contains("Ausgeführte Jobs"));
         assertFalse(jelly.contains("gdp-panel gdp-run-overview"));
-        assertTrue(jelly.contains("<section class=\"gdp-run-overview\" data-gdp-filter-list=\"runs\">"));
-        assertTrue(jelly.contains("data-gdp-filter-control=\"organization\""));
-        assertTrue(jelly.contains("data-gdp-filter-control=\"dataset\""));
+        assertTrue(jelly.contains("<section class=\"gdp-run-overview\">"));
+        assertTrue(jelly.contains("data-gdp-run-filters=\"true\""));
+        assertTrue(jelly.contains("name=\"organization\""));
+        assertTrue(jelly.contains("name=\"dataset\""));
+        assertTrue(jelly.contains("method=\"get\""));
+        assertTrue(jelly.contains("overview.nextPageQuery"));
+        assertTrue(jelly.contains("overview.previousPageQuery"));
+        assertTrue(jelly.contains("items=\"${overview.runs}\""));
+        assertFalse(jelly.contains("data-gdp-filter-item"));
+        assertFalse(jelly.contains("items=\"${it.executedRuns}\""));
         assertTrue(jelly.contains("href=\"${rootURL}/${it.urlName}/jobs\""));
         assertFalse(jelly.contains("gdp-job-list"));
     }
@@ -75,13 +82,15 @@ class RootActionViewAssetsTest {
     }
 
     @Test
-    void javascriptEnhancesUploadsAndListFiltering() throws IOException {
+    void javascriptEnhancesUploadsAndSubmitsRunFilters() throws IOException {
         String script = Files.readString(Path.of("src/main/webapp/js/gretl-datenportal.js"), StandardCharsets.UTF_8);
 
         assertTrue(script.contains("data-gdp-file-input"));
         assertFalse(script.contains("data-gdp-visible-param"));
         assertFalse(script.contains("data-gdp-required-param"));
-        assertTrue(script.contains("data-gdp-filter-item"));
+        assertTrue(script.contains("data-gdp-run-filters"));
+        assertTrue(script.contains("form.requestSubmit()"));
+        assertFalse(script.contains("data-gdp-filter-item"));
         assertTrue(script.contains("data-gdp-run-status-view"));
         assertTrue(script.contains("window.fetch"));
         assertTrue(script.contains("5000"));

@@ -5,8 +5,8 @@
             <link rel="stylesheet" href="${rootURL}/plugin/jenkins-gretl-datenportal-plugin/css/gretl-datenportal.css" />
             <script src="${rootURL}/plugin/jenkins-gretl-datenportal-plugin/js/gretl-datenportal.js"></script>
 
-            <j:set var="scanResult" value="${it.scanResult}" />
-            <j:set var="executedRuns" value="${it.executedRuns}" />
+            <j:set var="overview" value="${it.runOverview}" />
+            <j:set var="scanResult" value="${overview.scanResult}" />
 
             <div class="gdp-page">
                 <div class="gdp-page-header">
@@ -44,51 +44,64 @@
                     </section>
                 </j:if>
 
-                <section class="gdp-run-overview" data-gdp-filter-list="runs">
-                    <div class="gdp-toolbar">
+                <section class="gdp-run-overview">
+                    <form class="gdp-toolbar" method="get" action="${rootURL}/${it.urlName}/" data-gdp-run-filters="true">
                         <label class="gdp-filter">
                             <span>Organisation</span>
-                            <select class="gdp-control gdp-select" data-gdp-filter-control="organization">
+                            <select class="gdp-control gdp-select" name="organization">
                                 <option value="">Alle</option>
-                                <j:forEach var="organization" items="${it.runFilterOrganizations}">
-                                    <option value="${organization}">${organization}</option>
+                                <j:forEach var="option" items="${overview.organizationOptions}">
+                                    <j:choose>
+                                        <j:when test="${option.selected}"><option value="${option.value}" selected="selected">${option.label}</option></j:when>
+                                        <j:otherwise><option value="${option.value}">${option.label}</option></j:otherwise>
+                                    </j:choose>
                                 </j:forEach>
                             </select>
                         </label>
                         <label class="gdp-filter">
                             <span>Datensatz</span>
-                            <select class="gdp-control gdp-select" data-gdp-filter-control="dataset">
+                            <select class="gdp-control gdp-select" name="dataset">
                                 <option value="">Alle</option>
-                                <j:forEach var="dataset" items="${it.runFilterDatasets}">
-                                    <option value="${dataset}">${dataset}</option>
+                                <j:forEach var="option" items="${overview.datasetOptions}">
+                                    <j:choose>
+                                        <j:when test="${option.selected}"><option value="${option.value}" selected="selected">${option.label}</option></j:when>
+                                        <j:otherwise><option value="${option.value}">${option.label}</option></j:otherwise>
+                                    </j:choose>
                                 </j:forEach>
                             </select>
                         </label>
                         <label class="gdp-filter">
                             <span>Status</span>
-                            <select class="gdp-control gdp-select" data-gdp-filter-control="status">
+                            <select class="gdp-control gdp-select" name="status">
                                 <option value="">Alle</option>
-                                <option value="SUCCESS">Erfolgreich</option>
-                                <option value="FAILURE">Fehlgeschlagen</option>
-                                <option value="UNSTABLE">Instabil</option>
-                                <option value="ABORTED">Abgebrochen</option>
-                                <option value="RUNNING">Läuft</option>
+                                <j:forEach var="option" items="${overview.statusOptions}">
+                                    <j:choose>
+                                        <j:when test="${option.selected}"><option value="${option.value}" selected="selected">${option.label}</option></j:when>
+                                        <j:otherwise><option value="${option.value}">${option.label}</option></j:otherwise>
+                                    </j:choose>
+                                </j:forEach>
                             </select>
                         </label>
-                    </div>
+                        <noscript><button class="jenkins-button" type="submit">Filtern</button></noscript>
+                    </form>
 
                     <j:choose>
-                        <j:when test="${executedRuns.isEmpty()}">
+                        <j:when test="${!overview.hasExecutedRuns()}">
                             <div class="gdp-empty-state">
                                 <h3>Noch keine Jobs ausgeführt.</h3>
-                                <p>Sobald ein GRETL-Datenportal-Job gestartet wurde, erscheint er hier.</p>
+                                <p>Sobald ein Datenportal-Job gestartet wurde, erscheint er hier.</p>
+                            </div>
+                        </j:when>
+                        <j:when test="${overview.runs.isEmpty()}">
+                            <div class="gdp-empty-state gdp-empty-state--filtered">
+                                <h3>Keine passenden Ausführungen gefunden.</h3>
+                                <p><a href="${rootURL}/${it.urlName}/">Filter zurücksetzen</a>, um die neuesten ausgeführten Jobs zu sehen.</p>
                             </div>
                         </j:when>
                         <j:otherwise>
                             <div class="gdp-run-list">
-                                <j:forEach var="run" items="${executedRuns}">
+                                <j:forEach var="run" items="${overview.runs}">
                                     <article class="gdp-run-row"
-                                             data-gdp-filter-item="true"
                                              data-gdp-organization="${run.organizationValue}"
                                              data-gdp-dataset="${run.datasetValue}"
                                              data-gdp-status="${run.status}">
@@ -115,10 +128,24 @@
                                     </article>
                                 </j:forEach>
                             </div>
-                            <div class="gdp-empty-state gdp-empty-state--filtered" data-gdp-filter-empty="true" hidden="hidden">
-                                <h3>Keine passenden Ausführungen gefunden.</h3>
-                                <p>Filter zurücksetzen, um alle ausgeführten Jobs zu sehen.</p>
-                            </div>
+                            <nav class="gdp-pagination" aria-label="Ausführungen blättern">
+                                <span class="gdp-muted">${overview.firstResult}–${overview.lastResult} von ${overview.totalCount}</span>
+                                <div class="gdp-pagination__links">
+                                    <j:choose>
+                                        <j:when test="${overview.hasPreviousPage()}">
+                                            <a class="jenkins-button" rel="prev" href="${rootURL}/${it.urlName}/${overview.previousPageQuery}">Zurück</a>
+                                        </j:when>
+                                        <j:otherwise><button class="jenkins-button" type="button" disabled="disabled">Zurück</button></j:otherwise>
+                                    </j:choose>
+                                    <span class="gdp-muted">Seite ${overview.page} von ${overview.pageCount}</span>
+                                    <j:choose>
+                                        <j:when test="${overview.hasNextPage()}">
+                                            <a class="jenkins-button" rel="next" href="${rootURL}/${it.urlName}/${overview.nextPageQuery}">Weiter</a>
+                                        </j:when>
+                                        <j:otherwise><button class="jenkins-button" type="button" disabled="disabled">Weiter</button></j:otherwise>
+                                    </j:choose>
+                                </div>
+                            </nav>
                         </j:otherwise>
                     </j:choose>
                 </section>

@@ -13,6 +13,21 @@ class GretlDatenportalGlobalConfigurationTest {
 
     @Test
     @WithJenkins
+    void displayNameUsesNewDefaultAndPreservesCustomNames(JenkinsRule j) {
+        var configuration = GretlDatenportalGlobalConfiguration.get();
+        assertEquals("Datenportal Jobs", configuration.getDisplayName());
+        for (String oldDefault : new String[] {null, "", "  ", "GRETL Datenportal Jobs"}) {
+            configuration.setDisplayName(oldDefault);
+            configuration.load();
+            assertEquals("Datenportal Jobs", configuration.getDisplayName());
+        }
+        configuration.setDisplayName("Eigene Datenlieferungen");
+        configuration.load();
+        assertEquals("Eigene Datenlieferungen", configuration.getDisplayName());
+    }
+
+    @Test
+    @WithJenkins
     void writeBackDefaultsToOffAndConfigurationSurvivesReload(JenkinsRule j) throws Exception {
         var config = GretlDatenportalGlobalConfiguration.get();
         assertFalse(config.isTopicRepositoryWriteBackEnabled());

@@ -118,38 +118,13 @@
         });
     }
 
-    function initFilterLists() {
-        all(document, "[data-gdp-filter-list]").forEach(function (list) {
-            var controls = all(list, "[data-gdp-filter-control]");
-            var items = all(list, "[data-gdp-filter-item]");
-            var emptyState = list.querySelector("[data-gdp-filter-empty]");
-
-            function matches(item, control) {
-                var key = control.getAttribute("data-gdp-filter-control");
-                var selected = control.value;
-                return !selected || item.getAttribute("data-gdp-" + key) === selected;
-            }
-
-            function applyFilters() {
-                var visibleCount = 0;
-                items.forEach(function (item) {
-                    var visible = controls.every(function (control) {
-                        return matches(item, control);
-                    });
-                    item.hidden = !visible;
-                    if (visible) {
-                        visibleCount += 1;
-                    }
+    function initRunFilters() {
+        all(document, "[data-gdp-run-filters]").forEach(function (form) {
+            all(form, "select").forEach(function (control) {
+                control.addEventListener("change", function () {
+                    form.requestSubmit();
                 });
-                if (emptyState) {
-                    emptyState.hidden = visibleCount !== 0;
-                }
-            }
-
-            controls.forEach(function (control) {
-                control.addEventListener("change", applyFilters);
             });
-            applyFilters();
         });
     }
 
@@ -324,7 +299,7 @@
 
     onReady(function () {
         initStartForms();
-        initFilterLists();
+        initRunFilters();
         initRunStatusViews();
     });
 }());
