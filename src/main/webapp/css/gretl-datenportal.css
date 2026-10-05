@@ -410,6 +410,7 @@
 
 .gdp-job-row {
     grid-template-columns: minmax(0, 1fr) auto;
+    padding: 0.65rem 0.85rem;
 }
 
 .gdp-run-row:hover,

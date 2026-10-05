@@ -29,15 +29,10 @@
                                     <article class="gdp-job-row">
                                         <div class="gdp-job-row__main">
                                             <div class="gdp-run-row__title">
-                                                <span>${job.title}</span>
+                                                <span>${job.title} | ${job.organization}</span>
                                                 <j:if test="${job.status != 'ready'}">
                                                     <span class="gdp-badge" data-gdp-status="${job.status}">${job.statusLabel}</span>
                                                 </j:if>
-                                            </div>
-                                            <div class="gdp-run-row__meta">
-                                                <span>Organisation: <span>${job.organization}</span></span>
-                                                <span>Jobname: <span>${job.jobName}</span></span>
-                                                <span>Datensätze: <span>${job.datasetCount}</span></span>
                                             </div>
                                         </div>
                                         <div class="gdp-run-row__actions">

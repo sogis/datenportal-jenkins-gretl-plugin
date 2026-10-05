@@ -54,10 +54,10 @@ public final class DefaultGuiDefinitionFactory {
                 "stashedFile",
                 List.of("csv"),
                 100));
-        fields.add(field("COMMENT", "Kommentar", ParameterType.TEXT, false, "", false));
         if (includeSeriesId) {
             fields.add(field("SERIES_ID", "Ausgabe", ParameterType.STRING, false, "", false));
         }
+        fields.add(field("COMMENT", "Kommentar", ParameterType.TEXT, false, "", false));
         return new GuiDefinition(fields);
     }
 

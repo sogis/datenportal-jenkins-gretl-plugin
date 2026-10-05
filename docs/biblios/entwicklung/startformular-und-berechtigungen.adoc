@@ -25,6 +25,12 @@ Organisation und Buildnummer, Datum und Uhrzeit sowie den Button «Details».
 Lange Titel dürfen vollständig umbrechen. Weitere Metadaten und die Dauer
 sind in der Detailansicht verfügbar.
 
+Unter «Jobs starten» zeigt jede Organisationskarte den jeweiligen Namen und
+das Kürzel in einer kompakten Zeile («Name | Kürzel») sowie den Button
+«Starten». Lange Namen dürfen auf schmalen Bildschirmen umbrechen.
+Statushinweise und deaktivierte Buttons für nicht startbare Jobs bleiben
+sichtbar.
+
 Die GET-Parameter heissen `organization`, `dataset`, `status` und `page`.
 Fehlende, ungültige oder nicht positive Seitennummern verwenden Seite 1;
 Seitennummern über der letzten Seite verwenden die letzte Seite. Die
@@ -41,11 +47,12 @@ Unterstuetzte Felder:
 * `RELOAD_PORTAL`: optionaler Reload nach S3-Übernahme, Default `false`
 * `METADATA_FILE`
 * `DATA_FILE`
-* `COMMENT`
 * `SERIES_ID` (Ausgabe) nur fuer Datensaetze, deren Metadatenwurzel `DatasetSeries` ist
+* `COMMENT`
 
 Bei Serien erscheint das Freitextfeld «Ausgabe» erst, sobald eine Datendatei
-(`DATA_FILE`) ausgewählt ist, und wird dann zum Pflichtfeld. Wird die Datei
+(`DATA_FILE`) ausgewählt ist, und wird dann zum Pflichtfeld. Es steht direkt
+nach «Daten hochladen» und vor «Kommentar». Wird die Datei
 entfernt oder das Formular zurückgesetzt, wird die Ausgabe geleert,
 ausgeblendet und deaktiviert. Noch nicht erfasste Ausgaben sind zulässig.
 Ohne JavaScript bleibt das Feld zugänglich; die bedingte Pflicht wird auf dem
